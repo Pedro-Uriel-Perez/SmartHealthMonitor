@@ -6,26 +6,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import mx.edu.utng.smarthealthmonitor.data.models.LecturaFC
-import mx.edu.utng.smarthealthmonitor.data.models.MockData
+import androidx.lifecycle.viewmodel.compose.viewModel
+import mx.edu.utng.smarthealthmonitor.data.models.SmartHealthRepository
 import mx.edu.utng.smarthealthmonitor.ui.components.FilaHistorial
 import mx.edu.utng.smarthealthmonitor.ui.components.TarjetaDato
 import mx.edu.utng.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
+import mx.edu.utng.smarthealthmonitor.ui.viewmodel.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     onHistorialClick: () -> Unit = {},
     onAlertClick: () -> Unit = {},
-    fc: Int = MockData.fcActual,
-    pasos: Int = MockData.pasosActual,
-    historial: List<LecturaFC> = MockData.historialFC
+    viewModel: DashboardViewModel = viewModel()
 ) {
+    val fc by viewModel.fc.collectAsState()
+    val pasos by viewModel.pasos.collectAsState()
+    val historial = viewModel.historial
+
     SmartHealthMonitorTheme {
         Scaffold(
             topBar = {
@@ -95,6 +98,17 @@ fun DashboardScreen(
                 }
                 items(historial, key = { it.id }) { lectura ->
                     FilaHistorial(lectura = lectura)
+                }
+                item {
+                    OutlinedButton(
+                        onClick = {
+                            SmartHealthRepository.actualizarFC((60..110).random())
+                            SmartHealthRepository.actualizarPasos((3000..8000).random())
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Simular dato del wearable (DEBUG)")
+                    }
                 }
             }
         }
