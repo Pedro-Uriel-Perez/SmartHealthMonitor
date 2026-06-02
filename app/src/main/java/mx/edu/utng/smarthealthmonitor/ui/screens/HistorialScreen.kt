@@ -16,6 +16,8 @@ import mx.edu.utng.smarthealthmonitor.ui.components.FilaHistorial
 import mx.edu.utng.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import mx.edu.utng.smarthealthmonitor.ui.viewmodel.DashboardViewModel
 
+// Ejercicio 03 — HistorialScreen S7
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistorialScreen(
