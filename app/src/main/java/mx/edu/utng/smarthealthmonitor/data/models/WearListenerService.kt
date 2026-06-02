@@ -4,6 +4,8 @@ import android.util.Log
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
 
+// Ejercicio 01 — Health Services API S7
+
 class WearListenerService : WearableListenerService() {
     companion object {
         const val PATH_FC    = "/smarthealthmonitor/fc"
