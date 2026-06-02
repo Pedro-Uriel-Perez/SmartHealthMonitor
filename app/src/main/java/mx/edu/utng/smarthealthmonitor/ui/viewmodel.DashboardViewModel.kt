@@ -7,6 +7,7 @@ import mx.edu.utng.smarthealthmonitor.data.models.MockData
 import mx.edu.utng.smarthealthmonitor.data.models.SmartHealthRepository
 
 class DashboardViewModel : ViewModel() {
+
     val fc: StateFlow<Int> = SmartHealthRepository.fcFlow
         .map { if (it == 0) MockData.fcActual else it }
         .stateIn(
