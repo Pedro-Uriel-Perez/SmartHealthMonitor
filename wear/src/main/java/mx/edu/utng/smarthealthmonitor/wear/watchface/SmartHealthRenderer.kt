@@ -24,7 +24,7 @@ class SmartHealthRenderer(
     interactiveDrawModeUpdateDelayMillis: Long
 ) : Renderer.CanvasRenderer2<Renderer.SharedAssets>(
     surfaceHolder, currentUserStyleRepository, watchState,
-    CanvasType.HARDWARE, interactiveDrawModeUpdateDelayMillis
+    CanvasType.HARDWARE, interactiveDrawModeUpdateDelayMillis, false
 ) {
     private val paintHora = Paint().apply {
         color = Color.WHITE
@@ -43,14 +43,14 @@ class SmartHealthRenderer(
         isAntiAlias = true
     }
 
-    override suspend fun createSharedAssets(): SharedAssets =
-        object : SharedAssets { override fun onDestroy() {} }()
+    override suspend fun createSharedAssets(): Renderer.SharedAssets =
+        object : Renderer.SharedAssets { override fun onDestroy() {} }
 
     override fun render(
         canvas: Canvas,
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
-        sharedAssets: SharedAssets
+        sharedAssets: Renderer.SharedAssets
     ) {
         canvas.drawColor(Color.BLACK)
         val cx = bounds.exactCenterX()
@@ -75,7 +75,7 @@ class SmartHealthRenderer(
         canvas: Canvas,
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
-        sharedAssets: SharedAssets
+        sharedAssets: Renderer.SharedAssets
     ) {
         canvas.drawColor(renderParameters.highlightLayer!!.backgroundTint)
     }
