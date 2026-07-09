@@ -12,5 +12,6 @@ class TvApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         SmartHealthRepository.init(this)
+        SmartHealthRepository.sembrarHistorialDeDemoSiVacio()
     }
 }

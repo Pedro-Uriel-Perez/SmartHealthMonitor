@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import mx.edu.utng.smarthealthmonitor.data.db.LecturaFC
 import mx.edu.utng.smarthealthmonitor.data.db.SmartHealthDB
@@ -51,4 +52,18 @@ object SmartHealthRepository {
     }
 
     fun obtenerHistorial(): Flow<List<LecturaFC>> = db.lecturaFCDao().obtenerTodas()
+
+    // Cada app (tel, TV) tiene su propia base de datos privada, así que la TV
+    // no ve las lecturas simuladas en el teléfono. Sembramos datos de ejemplo
+    // solo si el historial local está vacío, para poder ver la fila poblada.
+    fun sembrarHistorialDeDemoSiVacio() {
+        if (!::db.isInitialized) return
+        scope.launch {
+            if (db.lecturaFCDao().obtenerTodas().first().isEmpty()) {
+                listOf(88, 92, 76, 105, 81, 99, 70).forEach { bpm ->
+                    db.lecturaFCDao().insertar(LecturaFC(valorBpm = bpm, hora = horaFormato.format(Date())))
+                }
+            }
+        }
+    }
 }
