@@ -28,8 +28,10 @@ fun TvPlaybackScreen(navController: NavController) {
     // Crear ExoPlayer ligado al ciclo de vida del Composable
     val exoPlayer = remember {
         ExoPlayer.Builder(ctx).build().apply {
+            // El bucket "gtv-videos-bucket" del PDF ya no es público (HTTP 403).
+            // Se usa el bucket oficial de pruebas de ExoPlayer/Media3 en su lugar.
             val mediaItem = MediaItem.fromUri(
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                "https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4"
             )
             setMediaItem(mediaItem)
             prepare()
