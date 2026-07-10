@@ -45,6 +45,17 @@ Desarrollada como proyecto integrador — UTNG 9° Cuatrimestre 2025.
 ![WatchFace](screenshots/watchface.png)
 ![WearDashboard](screenshots/wear_dashboard.png)
 
+## Unidad III — Android TV (Leanback)
+
+| Pantalla | Descripción |
+|---|---|
+| MainFragment | BrowseSupportFragment con filas "Estado actual" e "Historial FC" |
+| FCCardPresenter | ImageCardView con foco D-pad, color según FC normal/fuera de rango |
+| TvViewModel | Expone fc/historial de Room como StateFlow reactivo |
+
+![TV BrowseFragment](screenshots/tv_browsefragment.png)
+![TV Foco D-pad](screenshots/tv_focus.png)
+
 ## Autor
 
 Pedro Uriel Perez Monzon — UTNG — Ing. en Desarrollo y Gestión de Software
