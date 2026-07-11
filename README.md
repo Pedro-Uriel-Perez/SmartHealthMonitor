@@ -45,16 +45,29 @@ Desarrollada como proyecto integrador — UTNG 9° Cuatrimestre 2025.
 ![WatchFace](screenshots/watchface.png)
 ![WearDashboard](screenshots/wear_dashboard.png)
 
-## Unidad III — Android TV (Leanback)
+## Unidad III — Android TV
+
+**Sesión 11 (Leanback, superado por Compose for TV en la Sesión 12):**
 
 | Pantalla | Descripción |
 |---|---|
 | MainFragment | BrowseSupportFragment con filas "Estado actual" e "Historial FC" |
 | FCCardPresenter | ImageCardView con foco D-pad, color según FC normal/fuera de rango |
-| TvViewModel | Expone fc/historial de Room como StateFlow reactivo |
 
-![TV BrowseFragment](screenshots/tv_browsefragment.png)
-![TV Foco D-pad](screenshots/tv_focus.png)
+![TV BrowseFragment (Leanback)](screenshots/tv_browsefragment.png)
+![TV Foco D-pad (Leanback)](screenshots/tv_focus.png)
+
+**Sesión 12 — Compose for TV + Navigation Compose + Media3/ExoPlayer:**
+
+| Pantalla | Descripción |
+|---|---|
+| TvCatalogScreen | Catálogo en Compose for TV, reemplaza MainFragment+FCCardPresenter |
+| TvDetailScreen | Detalle de la lectura (bpm/estado/hora) con foco inicial vía FocusRequester |
+| TvPlaybackScreen | ExoPlayer embebido con AndroidView, liberado con DisposableEffect |
+
+![TV Catalog (Compose)](screenshots/tv2_catalog.png)
+![TV Detail (Compose)](screenshots/tv2_detail.png)
+![TV Playback (Compose + ExoPlayer)](screenshots/tv2_playback.png)
 
 ## Autor
 
