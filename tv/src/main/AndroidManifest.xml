@@ -6,6 +6,8 @@
     <!-- No requiere pantalla táctil -->
     <uses-feature android:name="android.hardware.touchscreen"
         android:required="false" />
+    <!-- ExoPlayer reproduce un video remoto en TvPlaybackScreen -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".TvApplication"
@@ -13,7 +15,7 @@
         android:banner="@drawable/banner_tv"
         android:label="SmartHealth TV">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".TVActivity"
             android:exported="true"
             android:label="SmartHealth TV">
             <intent-filter>

@@ -12,4 +12,8 @@ data class LecturaFC(
     // Considera "normal" una FC en reposo entre 60 y 100 bpm.
     val esNormal: Boolean
         get() = valorBpm in 60..100
+
+    // Alias usados por las pantallas de TV (Compose for TV, Sesión 12).
+    val bpm: Int get() = valorBpm
+    val estado: String get() = if (esNormal) "Normal" else "Alerta"
 }
