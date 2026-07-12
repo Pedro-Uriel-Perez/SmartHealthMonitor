@@ -55,4 +55,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-wearable:18.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation(project(":data"))
+
+    // Cast SDK
+    implementation("androidx.mediarouter:mediarouter:1.7.0")
+    implementation("com.google.android.gms:play-services-cast-framework:21.5.0")
 }
