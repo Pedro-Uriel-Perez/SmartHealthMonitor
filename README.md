@@ -69,6 +69,34 @@ Desarrollada como proyecto integrador — UTNG 9° Cuatrimestre 2025.
 ![TV Detail (Compose)](screenshots/tv2_detail.png)
 ![TV Playback (Compose + ExoPlayer)](screenshots/tv2_playback.png)
 
+## Arquitectura — SmartHealth Monitor
+
+```
+Sensor FC (Wear OS)
+      │  simulado / Health Services
+      ▼
+WearDataSender (wear)
+      │  MessageClient (BLE)
+      ▼
+WearListenerService (app)
+      │  SmartHealthRepository.actualizarFC()
+      ▼
+SmartHealthRepository (:data) ──► Room DB — SmartHealthDB (LecturaFC)
+      │
+      ├── StateFlow<Int> (fcFlow) ─────────────────────────────────┐
+      │                                                             │
+      └── Flow<List<LecturaFC>> (obtenerHistorial) ──┐              │
+                                                       │              │
+      ┌────────────────────────────────────────────┐ │              │
+      ▼                                             ▼ ▼              ▼
+DashboardViewModel (app)                       TvViewModel (tv)
+      │ collectAsState()                             │ collectAsStateWithLifecycle()
+      ▼                                               ▼
+DashboardScreen (Compose)                     TvCatalogScreen (Compose for TV)
+ ├── CastButton ──► Chromecast (Remote Playback)      ├── OK en card → TvDetailScreen
+ └── "Ver todo" ──► HistorialScreen (Room)             └── ▶ Reproducir → TvPlaybackScreen (ExoPlayer)
+```
+
 ## Autor
 
 Pedro Uriel Perez Monzon — UTNG — Ing. en Desarrollo y Gestión de Software
