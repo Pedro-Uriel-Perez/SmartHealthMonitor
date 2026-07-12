@@ -24,7 +24,7 @@ fun HistorialScreen(
     onBack: () -> Unit,
     viewModel: DashboardViewModel = viewModel()
 ) {
-    val lecturas = viewModel.historial
+    val lecturas by viewModel.historial.collectAsState()
 
     SmartHealthMonitorTheme {
         Scaffold(
