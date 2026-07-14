@@ -2,6 +2,7 @@ package mx.edu.utng.smarthealthmonitor.tv
 
 import android.app.Application
 import mx.edu.utng.smarthealthmonitor.data.models.SmartHealthRepository
+import mx.edu.utng.smarthealthmonitor.tv.mqtt.MqttTvSubscriber
 
 /**
  * Application del módulo tv.
@@ -13,5 +14,6 @@ class TvApplication : Application() {
         super.onCreate()
         SmartHealthRepository.init(this)
         SmartHealthRepository.sembrarHistorialDeDemoSiVacio()
+        MqttTvSubscriber.connect(this)
     }
 }
