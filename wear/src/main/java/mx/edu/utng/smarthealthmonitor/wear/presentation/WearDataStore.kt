@@ -18,4 +18,8 @@ object WearDataStore {
         )
     )
     val historialFlow: StateFlow<List<WearLecturaFC>> = _historialFlow.asStateFlow()
+
+    fun actualizarFC(bpm: Int) {
+        _fcFlow.value = bpm
+    }
 }
