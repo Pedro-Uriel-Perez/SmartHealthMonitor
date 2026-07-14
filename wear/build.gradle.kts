@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -38,6 +39,13 @@ kotlin {
 }
 
 dependencies {
+    // Compartir MqttConfig/MqttMessage con :app y :tv
+    implementation(project(":data"))
+
+    // MQTT (HiveMQ Cloud)
+    implementation(libs.paho.mqttv3)
+    implementation(libs.kotlinx.serialization.json)
+
     // Compose for Wear OS
     implementation(libs.wear.compose.material)
     implementation(libs.wear.compose.foundation)

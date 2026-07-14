@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -52,4 +53,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
 
     implementation(libs.androidx.core.ktx)
+
+    // MQTT (HiveMQ Cloud)
+    implementation(libs.paho.mqttv3)
+    implementation(libs.kotlinx.serialization.json)
 }
