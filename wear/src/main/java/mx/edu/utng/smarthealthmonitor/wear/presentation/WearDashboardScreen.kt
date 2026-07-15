@@ -17,7 +17,9 @@ import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.scrollAway
+import mx.edu.utng.smarthealthmonitor.wear.mqtt.MqttWearPublisher
 import mx.edu.utng.smarthealthmonitor.wear.presentation.components.WearFCCard
+import kotlin.random.Random
 
 @Composable
 fun WearDashboardScreen(
@@ -57,6 +59,24 @@ fun WearDashboardScreen(
                 Chip(
                     label = { Text("📋 Historial") },
                     onClick = onHistorialClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            item {
+                // Simula un cambio de FC (como movería el slider de Health Services)
+                // y lo publica a HiveMQ Cloud para que el teléfono y la TV lo reciban.
+                Chip(
+                    label = { Text("🔄 Simular FC (MQTT)") },
+                    onClick = {
+                        val bpm = Random.nextInt(55, 130)
+                        val estado = when {
+                            bpm < 60 -> "FC Baja"
+                            bpm > 100 -> "FC Alta"
+                            else -> "Normal"
+                        }
+                        WearDataStore.actualizarFC(bpm)
+                        MqttWearPublisher.publishFC(bpm, estado)
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
             }

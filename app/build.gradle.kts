@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -55,4 +56,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-wearable:18.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     implementation(project(":data"))
+
+    // MQTT (HiveMQ Cloud)
+    implementation(libs.paho.mqttv3)
+    implementation(libs.kotlinx.serialization.json)
 }
