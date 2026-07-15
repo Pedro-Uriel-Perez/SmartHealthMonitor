@@ -43,7 +43,9 @@ object MqttTvSubscriber {
                     Log.d(TAG, "📺 Recibido: ${tvMsg.bpm} bpm")
                 }
             }
-            override fun connectionLost(cause: Throwable?) {}
+            override fun connectionLost(cause: Throwable?) {
+                Log.w(TAG, "Conexión perdida", cause)
+            }
             override fun deliveryComplete(token: IMqttDeliveryToken?) {}
         })
 
@@ -56,11 +58,18 @@ object MqttTvSubscriber {
 
         client?.connect(options, null, object : IMqttActionListener {
             override fun onSuccess(token: IMqttToken?) {
-                client?.subscribe(MqttConfig.TOPIC_TV, MqttConfig.QOS)
-                Log.d(TAG, "✅ TV suscrita a ${MqttConfig.TOPIC_TV}")
+                Log.d(TAG, "✅ Conectado a HiveMQ Cloud")
+                client?.subscribe(MqttConfig.TOPIC_TV, MqttConfig.QOS, null, object : IMqttActionListener {
+                    override fun onSuccess(subToken: IMqttToken?) {
+                        Log.d(TAG, "✅ TV suscrita a ${MqttConfig.TOPIC_TV}")
+                    }
+                    override fun onFailure(subToken: IMqttToken?, ex: Throwable?) {
+                        Log.e(TAG, "❌ Falló la suscripción", ex)
+                    }
+                })
             }
             override fun onFailure(token: IMqttToken?, ex: Throwable?) {
-                Log.e(TAG, "❌ Error: ${ex?.message}")
+                Log.e(TAG, "❌ Error de conexión", ex)
             }
         })
     }

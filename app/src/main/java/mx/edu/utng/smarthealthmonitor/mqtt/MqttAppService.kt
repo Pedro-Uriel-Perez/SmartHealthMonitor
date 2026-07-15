@@ -53,18 +53,25 @@ object MqttAppService {
                 if (topic == MqttConfig.TOPIC_FC) handleFcMessage(msg)
             }
             override fun connectionLost(cause: Throwable?) {
-                Log.w(TAG, "Conexión perdida: ${cause?.message}")
+                Log.w(TAG, "Conexión perdida", cause)
             }
             override fun deliveryComplete(token: IMqttDeliveryToken?) {}
         })
 
         client?.connect(options, null, object : IMqttActionListener {
             override fun onSuccess(token: IMqttToken?) {
-                client?.subscribe(MqttConfig.TOPIC_FC, MqttConfig.QOS)
-                Log.d(TAG, "✅ Conectado y suscrito a ${MqttConfig.TOPIC_FC}")
+                Log.d(TAG, "✅ Conectado a HiveMQ Cloud")
+                client?.subscribe(MqttConfig.TOPIC_FC, MqttConfig.QOS, null, object : IMqttActionListener {
+                    override fun onSuccess(subToken: IMqttToken?) {
+                        Log.d(TAG, "✅ Suscrito a ${MqttConfig.TOPIC_FC}")
+                    }
+                    override fun onFailure(subToken: IMqttToken?, ex: Throwable?) {
+                        Log.e(TAG, "❌ Falló la suscripción", ex)
+                    }
+                })
             }
             override fun onFailure(token: IMqttToken?, ex: Throwable?) {
-                Log.e(TAG, "❌ Error: ${ex?.message}")
+                Log.e(TAG, "❌ Error de conexión", ex)
             }
         })
     }

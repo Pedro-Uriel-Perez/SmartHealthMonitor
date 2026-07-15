@@ -42,7 +42,7 @@ object MqttWearPublisher {
                 Log.d(TAG, "✅ Conectado a HiveMQ Cloud")
             }
             override fun onFailure(token: IMqttToken?, ex: Throwable?) {
-                Log.e(TAG, "❌ Error: ${ex?.message}")
+                Log.e(TAG, "❌ Error de conexión", ex)
             }
         })
     }
@@ -57,8 +57,14 @@ object MqttWearPublisher {
             qos = MqttConfig.QOS
             isRetained = true // el TV verá el último valor al conectarse
         }
-        client?.publish(MqttConfig.TOPIC_FC, mqttMessage)
-        Log.d(TAG, "📤 Publicado: $bpm bpm → ${MqttConfig.TOPIC_FC}")
+        client?.publish(MqttConfig.TOPIC_FC, mqttMessage, null, object : IMqttActionListener {
+            override fun onSuccess(token: IMqttToken?) {
+                Log.d(TAG, "📤 Publicado (confirmado por el broker): $bpm bpm → ${MqttConfig.TOPIC_FC}")
+            }
+            override fun onFailure(token: IMqttToken?, ex: Throwable?) {
+                Log.e(TAG, "❌ Falló el publish", ex)
+            }
+        })
     }
 
     fun disconnect() {
