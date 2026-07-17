@@ -7,7 +7,11 @@ import androidx.room.PrimaryKey
 data class LecturaFC(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val valorBpm: Int,
-    val hora: String
+    val hora: String,
+    // wear | app | tv — qué dispositivo originó la lectura (para Neon).
+    val dispositivo: String = "app",
+    // false = todavía no llega a Neon (offline-first, ver SmartHealthRepository).
+    val sincronizado: Boolean = false
 ) {
     // Considera "normal" una FC en reposo entre 60 y 100 bpm.
     val esNormal: Boolean
