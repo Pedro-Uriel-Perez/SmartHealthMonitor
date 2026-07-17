@@ -60,4 +60,7 @@ dependencies {
     // MQTT (HiveMQ Cloud)
     implementation(libs.paho.mqttv3)
     implementation(libs.kotlinx.serialization.json)
+
+    // WorkManager — sync periódico con Neon en background
+    implementation(libs.androidx.work.runtime.ktx)
 }
