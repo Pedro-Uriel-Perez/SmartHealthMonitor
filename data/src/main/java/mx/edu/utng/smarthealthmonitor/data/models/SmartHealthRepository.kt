@@ -90,7 +90,6 @@ object SmartHealthRepository {
     private suspend fun sincronizarHaciaNeon(lectura: LecturaFC) {
         if (!NeonClient.isConfigured) error("Neon sin configurar")
         NeonClient.api.executeQuery(
-            auth = NeonClient.AUTH_HEADER,
             connStr = NeonClient.CONN_STRING,
             request = NeonRequest(
                 query = """INSERT INTO lecturas_fc (bpm, estado, dispositivo, hora)
@@ -105,7 +104,6 @@ object SmartHealthRepository {
     suspend fun sincronizarDesdeNeon(limite: Int = 50) {
         if (!::db.isInitialized || !NeonClient.isConfigured) return
         val response = NeonClient.api.executeQuery(
-            auth = NeonClient.AUTH_HEADER,
             connStr = NeonClient.CONN_STRING,
             request = NeonRequest(
                 query = """SELECT id, bpm, estado, dispositivo, hora FROM lecturas_fc

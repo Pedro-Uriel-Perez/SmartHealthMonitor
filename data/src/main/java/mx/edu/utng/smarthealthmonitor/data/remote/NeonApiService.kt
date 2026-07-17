@@ -56,11 +56,16 @@ fun LecturaFcDto.toLecturaFC(): LecturaFC = LecturaFC(
     sincronizado = true
 )
 
-/** Interfaz Retrofit para la Neon HTTP API */
+/**
+ * Interfaz Retrofit para la Neon HTTP API.
+ * Solo necesita Neon-Connection-String (usuario/contraseña van dentro de esa
+ * cadena) — un header "Authorization: Bearer <API key>" adicional hace que
+ * Neon rechace la petición con 400 "missing authentication credentials",
+ * porque esa API key es para la Management API, no para este endpoint /sql.
+ */
 interface NeonApiService {
     @POST("sql")
     suspend fun executeQuery(
-        @Header("Authorization") auth: String,
         @Header("Neon-Connection-String") connStr: String,
         @Body request: NeonRequest
     ): NeonResponse<LecturaFcDto>

@@ -23,7 +23,6 @@ object WearNeonRepository {
         }
         val hora = horaFormato.format(Date())
         NeonClient.api.executeQuery(
-            auth = NeonClient.AUTH_HEADER,
             connStr = NeonClient.CONN_STRING,
             request = NeonRequest(
                 query = "INSERT INTO lecturas_fc (bpm, estado, dispositivo, hora) VALUES ($1, $2, $3, $4)",
@@ -37,7 +36,6 @@ object WearNeonRepository {
     suspend fun obtenerUltimasLecturas(): List<LecturaFcDto> {
         if (!NeonClient.isConfigured) return emptyList()
         return NeonClient.api.executeQuery(
-            auth = NeonClient.AUTH_HEADER,
             connStr = NeonClient.CONN_STRING,
             request = NeonRequest(
                 query = "SELECT * FROM lecturas_fc WHERE dispositivo='wear' ORDER BY created_at DESC LIMIT 5"

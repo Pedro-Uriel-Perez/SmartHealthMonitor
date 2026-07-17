@@ -16,10 +16,9 @@ object NeonClient {
     private val json = Json { ignoreUnknownKeys = true }
 
     private val BASE_URL: String get() = "https://${BuildConfig.NEON_HOST}/"
-    val AUTH_HEADER: String get() = "Bearer ${BuildConfig.NEON_API_KEY}"
     val CONN_STRING: String get() = BuildConfig.NEON_CONNECTION_STRING
 
-    val isConfigured: Boolean get() = BuildConfig.NEON_HOST.isNotBlank() && BuildConfig.NEON_API_KEY.isNotBlank()
+    val isConfigured: Boolean get() = BuildConfig.NEON_HOST.isNotBlank() && BuildConfig.NEON_CONNECTION_STRING.isNotBlank()
 
     val api: NeonApiService by lazy {
         val okHttp = OkHttpClient.Builder()
