@@ -24,7 +24,8 @@ fun HistorialScreen(
     onBack: () -> Unit,
     viewModel: DashboardViewModel = viewModel()
 ) {
-    val lecturas = viewModel.historial
+    val lecturas by viewModel.historial.collectAsState()
+    val pendientes by viewModel.pendientesSync.collectAsState()
 
     SmartHealthMonitorTheme {
         Scaffold(
@@ -65,8 +66,12 @@ fun HistorialScreen(
                     contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
                     item {
+                        val texto = if (pendientes > 0)
+                            "${lecturas.size} lecturas registradas — $pendientes sin sincronizar con Neon"
+                        else
+                            "${lecturas.size} lecturas registradas — todas sincronizadas con Neon"
                         Text(
-                            text = "${lecturas.size} lecturas registradas",
+                            text = texto,
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(16.dp)
