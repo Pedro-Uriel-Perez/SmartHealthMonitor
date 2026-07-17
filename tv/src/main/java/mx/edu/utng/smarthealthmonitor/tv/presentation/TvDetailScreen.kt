@@ -74,6 +74,10 @@ fun TvDetailScreen(
                 "Hora: ${lectura.hora}",
                 style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.6f)
             )
+            Text(
+                "Dispositivo: ${lectura.dispositivo}",
+                style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.6f)
+            )
         }
 
         // Panel derecho — botones de acción

@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -42,28 +45,55 @@ fun TvCatalogScreen(
             .background(Color(0xFF121212))
             .padding(48.dp)
     ) {
-        Text("SmartHealth TV", style = MaterialTheme.typography.headlineLarge, color = Color.White)
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("SmartHealth TV", style = MaterialTheme.typography.headlineLarge, color = Color.White)
+            Surface(
+                onClick = { viewModel.refresh() },
+                colors = ClickableSurfaceDefaults.colors(
+                    containerColor = Color(0xFF1B4F8A),
+                    focusedContainerColor = Color(0xFF2E7DD1)
+                ),
+                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp))
+            ) {
+                Text(
+                    if (state.isLoading) "Actualizando…" else "↺ Actualizar",
+                    color = Color.White,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+                )
+            }
+        }
         Spacer48()
 
-        Text("Estado actual", style = MaterialTheme.typography.titleMedium, color = Color.White)
-        Box(Modifier.padding(top = 16.dp)) {
-            // Card informativa con el FC en vivo — no navega a detalle porque
-            // no corresponde a una fila persistida en Room.
-            FcCardItem(
-                lectura = LecturaFC(id = -1, valorBpm = state.fc, hora = "Ahora"),
-                onClick = {}
-            )
+        if (state.error != null) {
+            Text("⚠ ${state.error}", color = Color(0xFFE53935))
+            Spacer48()
+        }
+
+        Text("Estado Actual (3 dispositivos)", style = MaterialTheme.typography.titleMedium, color = Color.White)
+        LazyRow(
+            modifier = Modifier.padding(top = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(state.estadisticas, key = { it.dispositivo }) { estadistica ->
+                // Cards informativas (promedio por dispositivo) — no navegan a detalle
+                // porque no corresponden a una fila individual con id real en Neon.
+                FcCardItem(lectura = estadistica, label = estadistica.dispositivo, onClick = {})
+            }
         }
 
         Spacer48()
 
-        Text("Historial FC", style = MaterialTheme.typography.titleMedium, color = Color.White)
+        Text("Historial Completo", style = MaterialTheme.typography.titleMedium, color = Color.White)
         LazyRow(
             modifier = Modifier.padding(top = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(state.lecturas, key = { it.id }) { lectura ->
-                FcCardItem(lectura = lectura, onClick = { onCardClick(lectura.id) })
+                FcCardItem(lectura = lectura, label = lectura.dispositivo, onClick = { onCardClick(lectura.id) })
             }
         }
     }
@@ -75,7 +105,7 @@ private fun Spacer48() {
 }
 
 @Composable
-fun FcCardItem(lectura: LecturaFC, onClick: () -> Unit) {
+fun FcCardItem(lectura: LecturaFC, onClick: () -> Unit, label: String? = null) {
     Surface(
         onClick = onClick,
         modifier = Modifier.size(160.dp, 120.dp),
@@ -89,6 +119,9 @@ fun FcCardItem(lectura: LecturaFC, onClick: () -> Unit) {
             Modifier.fillMaxSize().padding(12.dp),
             verticalArrangement = Arrangement.Bottom
         ) {
+            if (label != null) {
+                Text(label.uppercase(), color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            }
             Text("${lectura.bpm} bpm", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(lectura.hora, color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
         }
