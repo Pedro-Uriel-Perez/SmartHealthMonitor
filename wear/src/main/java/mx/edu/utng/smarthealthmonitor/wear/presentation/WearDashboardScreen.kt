@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -17,6 +18,8 @@ import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.scrollAway
+import kotlinx.coroutines.launch
+import mx.edu.utng.smarthealthmonitor.wear.data.WearNeonRepository
 import mx.edu.utng.smarthealthmonitor.wear.mqtt.MqttWearPublisher
 import mx.edu.utng.smarthealthmonitor.wear.presentation.components.WearFCCard
 import kotlin.random.Random
@@ -29,6 +32,7 @@ fun WearDashboardScreen(
 ) {
     val fc by viewModel.fc.collectAsState()
     val listState = rememberScalingLazyListState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         timeText = {
@@ -63,10 +67,10 @@ fun WearDashboardScreen(
                 )
             }
             item {
-                // Simula un cambio de FC (como movería el slider de Health Services)
-                // y lo publica a HiveMQ Cloud para que el teléfono y la TV lo reciban.
+                // Simula un cambio de FC (como movería el slider de Health Services):
+                // actualiza la UI local, publica por MQTT (Sesión MQTT) y por Neon (esta sesión).
                 Chip(
-                    label = { Text("🔄 Simular FC (MQTT)") },
+                    label = { Text("🔄 Simular FC") },
                     onClick = {
                         val bpm = Random.nextInt(55, 130)
                         val estado = when {
@@ -76,6 +80,10 @@ fun WearDashboardScreen(
                         }
                         WearDataStore.actualizarFC(bpm)
                         MqttWearPublisher.publishFC(bpm, estado)
+                        scope.launch {
+                            runCatching { WearNeonRepository.publicarLectura(bpm, estado) }
+                                .onFailure { android.util.Log.w("WEAR", "Sin red / Neon: ${it.message}") }
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
