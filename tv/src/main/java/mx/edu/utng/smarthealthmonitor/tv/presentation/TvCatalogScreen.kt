@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,7 +90,15 @@ fun TvCatalogScreen(
         Spacer48()
 
         Text("Historial Completo", style = MaterialTheme.typography.titleMedium, color = Color.White)
+        val historialListState = rememberLazyListState()
+        // La lista está ordenada más-reciente-primero; al llegar datos nuevos (refresh
+        // o carga inicial) volvemos al inicio para que la última lectura sea visible
+        // sin depender de que el usuario recuerde desplazarse manualmente.
+        LaunchedEffect(state.lecturas) {
+            if (state.lecturas.isNotEmpty()) historialListState.scrollToItem(0)
+        }
         LazyRow(
+            state = historialListState,
             modifier = Modifier.padding(top = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
