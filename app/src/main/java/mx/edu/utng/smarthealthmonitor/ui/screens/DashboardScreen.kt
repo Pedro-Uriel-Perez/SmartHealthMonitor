@@ -29,7 +29,7 @@ fun DashboardScreen(
 ) {
     val fc     by viewModel.fc.collectAsState()
     val pasos  by viewModel.pasos.collectAsState()
-    val historial = viewModel.historial
+    val historial by viewModel.historial.collectAsState()
 
     // ── Estado del diálogo y Snackbar ──────────────────────
     var mostrarAlerta by remember { mutableStateOf(false) }

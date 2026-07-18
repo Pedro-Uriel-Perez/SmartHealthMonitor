@@ -46,6 +46,12 @@ dependencies {
     implementation(libs.paho.mqttv3)
     implementation(libs.kotlinx.serialization.json)
 
+    // Retrofit + OkHttp para la Neon HTTP API
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
     // Compose for Wear OS
     implementation(libs.wear.compose.material)
     implementation(libs.wear.compose.foundation)
